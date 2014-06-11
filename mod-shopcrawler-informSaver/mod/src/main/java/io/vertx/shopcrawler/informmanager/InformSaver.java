@@ -1,3 +1,5 @@
+package io.vertx.shopcrawler.informmanager;
+
 import org.vertx.java.core.Handler;
 import org.vertx.java.platform.Verticle;
 import org.vertx.java.core.eventbus.EventBus;
@@ -6,7 +8,7 @@ import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
-public class informSaver extends Verticle {
+public class InformSaver extends Verticle {
 	static EventBus eb;
 
 	public void start() {
