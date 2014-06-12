@@ -29,6 +29,7 @@ public class InformSaverTest extends TestVerticle {
 
 		config.putString("address", address);
 
+		System.out.println(System.getProperty("vertx.modulename"));
 		container.deployModule(System.getProperty("vertx.modulename"), config, 1, new AsyncResultHandler<String>() {
 			@Override
 			public void handle(AsyncResult<String> event) {
