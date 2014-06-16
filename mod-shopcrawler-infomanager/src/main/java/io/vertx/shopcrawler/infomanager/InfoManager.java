@@ -1,28 +1,28 @@
-package io.vertx.shopcrawler.informmanager;
+package io.vertx.shopcrawler.infomanager;
 
+import java.sql.SQLException;
+
+import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
 import org.vertx.java.platform.Verticle;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
-public class InformSaver extends Verticle {
+public class InfoManager extends BusModBase implements Handler<Message<JsonObject>> {
 	static EventBus eb;
+	DbConnect conn;
 
 	public void start() {
-		eb = vertx.eventBus();
+		super.start();
 
-		// db config
-		JsonObject dbConfig = container.config();
-		dbConfig.putString("address", "shop.saver.db");
-		dbConfig.putString("connection","PostgreSQL");
-		dbConfig.putString("host","localhost");
-		dbConfig.putNumber("port", 5432);
-		dbConfig.putString("username", "postgres");
-		dbConfig.putString("password" ,"zmfhffj");
-		dbConfig.putString("database", "shopcrawler");
+		try {
+			conn = DbConnect.getInstance();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		/**
 		 * product saver
@@ -82,20 +82,10 @@ public class InformSaver extends Verticle {
 				});
 			}
 		});
+	}
 
-		// module
-		container.deployModule ("io.vertx~mod-mysql-postgresql~0.3.0-SNAPSHOT", dbConfig, new Handler<AsyncResult<String>>() {
-			@Override
-			public void handle(AsyncResult<String> event) {
-				System.out.println("Postgres module deployed:" + event.toString() + ",failed:" + event.failed() + ": " + event.cause());
-			}
-		});
-
-		// regist handler
-		eb.registerHandler("shop.saver.product", productSaver);
-		eb.registerHandler("shop.saver.mall", mallSaver);
-
-		// test
-		eb.publish("shop.test.saver", "test");
+	@Override
+	public void handle(Message<JsonObject> event) {
+		// TODO Auto-generated method stub
 	}
 }
