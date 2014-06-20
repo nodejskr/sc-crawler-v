@@ -1,6 +1,7 @@
 package io.vertx.shopcrawler.infomanager;
 
-import java.lang.annotation.Annotation;
+import io.vertx.shopcrawler.infomanager.type.MallType;
+import io.vertx.shopcrawler.infomanager.type.Product;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -16,8 +17,8 @@ import org.vertx.testtools.VertxAssert;
 import static org.vertx.testtools.VertxAssert.*;
 
 public class InfoSaverTest extends TestVerticle {
-	private final String address = "test.redis.eval";
-	//private final Logger logger = Logger.getLogger(this.getClass());
+	private final String address = "test.infomanager.saver";
+	private final Logger logger = Logger.getLogger(this.getClass());
 	private EventBus eb;
 
 	private void appReady() {
@@ -39,41 +40,24 @@ public class InfoSaverTest extends TestVerticle {
 		});
 	}
 
-	private void save(final JsonObject json, final boolean isFail, final Handler<Message<JsonObject>> handler) {
+	@Test
+	public void testSaveMallType() {
+		MallType mallType = new MallType("godo", "test.com");
+		JsonObject json = new JsonObject();
+		json.putString("command", "insert_malltype");
+		json.putObject("data", mallType.toJson());
+
 		eb.send(address, json, new Handler<Message<JsonObject>>() {
 			@Override
 			public void handle(Message<JsonObject> reply) {
-				if (isFail) {
-					assertEquals("error", reply.body().getString("status"));
-				} else {
-					assertEquals("ok", reply.body().getString("status"));
-				}
-
-				handler.handle(reply);
+				logger.debug(reply);
+				testComplete();
 			}
 		});
 	}
 
 	@Test
-	public void testSave() {
-		JsonObject json = new JsonObject();
-		json.putString("command", "save");
-		json.putString("target", "product");
-
-		testComplete();
-		//		this.save(json, true, new Handler<Message<JsonObject>>() {
-		//			@Override
-		//			public void handle(Message<JsonObject> reply) {
-		//				// TODO Auto-generated method stub
-		//				//logger.debug("test save");
-		//				testComplete();
-		//			}
-		//		});
-	}
-
-	@Test
-	public void testEval2() {
-		System.out.println("end");
+	public void testSaveProduct() {
 		testComplete();
 	}
 }

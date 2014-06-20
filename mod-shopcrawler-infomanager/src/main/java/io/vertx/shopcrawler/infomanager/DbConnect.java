@@ -1,24 +1,26 @@
 package io.vertx.shopcrawler.infomanager;
 
-import java.sql.*;
-import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.log4j.Logger;
 import org.vertx.java.core.Handler;
 
 public class DbConnect {
 	private static DbConnect instance = null;
-	private Connection conn = null;
+	private SqlSessionFactory sqlSessionFactory = null;
 
-	private DbConnect() throws SQLException {
-		String url = "jdbc:postgresql://localhost/shopcrawler";
-		Properties props = new Properties();
-		props.setProperty("user","postgres");
-		props.setProperty("password","tpqhdTl");
-
-		conn = DriverManager.getConnection(url, props);
+	private DbConnect() throws IOException {
+		InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
+		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		Logger.getLogger(getClass()).debug(sqlSessionFactory.getConfiguration().getDatabaseId());
 	}
 
-	public static DbConnect getInstance() throws SQLException {
+	public static DbConnect getInstance() throws IOException {
 		if (instance == null) {
 			instance = new DbConnect();
 		}
@@ -26,15 +28,13 @@ public class DbConnect {
 		return instance;
 	}
 
-	public ResultSet excuteQuery(String query, Handler<ResultSet> handler) throws SQLException {
-		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery(query);
+	public void excuteQuery(Handler<SqlSession> handler) {
+		SqlSession session = sqlSessionFactory.openSession();
 
-		handler.handle(rs);
-
-		rs.close();
-		st.close();
-
-		return rs;
+		try {
+			handler.handle(session);
+		} finally {
+			session.close();
+		}
 	}
 }

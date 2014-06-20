@@ -1,17 +1,17 @@
 package io.vertx.shopcrawler.infomanager;
 
-import java.sql.SQLException;
+import io.vertx.shopcrawler.infomanager.type.MallType;
+
+import java.io.IOException;
 
 import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
-import org.vertx.java.platform.Verticle;
-import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 public class InfoManager extends BusModBase implements Handler<Message<JsonObject>> {
-	static EventBus eb;
+	private String baseAddress = null;
 	DbConnect conn;
 
 	public void start() {
@@ -19,73 +19,63 @@ public class InfoManager extends BusModBase implements Handler<Message<JsonObjec
 
 		try {
 			conn = DbConnect.getInstance();
-		} catch (SQLException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		/**
-		 * product saver
-		 */
-		Handler<Message> productSaver = new Handler<Message>() {
-			public void handle(Message message) {
-				// insert product
-				if ("insert".equals(message.body())) {
-					System.out.println("saved product");
+		JsonObject config = container.config();
+		baseAddress = config.getString("address", "io.vertx.shopcrawler.infomanager");
 
-					//EventBus eb = vertx.eventBus();
-					//eb.publish("shop.saver.complete.product", "");
-				} else if("select".equals(message.body())) {
-					vertx.eventBus().send("shop.saver.query", "select count(*) from product;", new Handler<Message<String>>() {
-						@Override
-						public void handle(Message<String> event) {
-							System.out.println("Result of query:" + event.body());
-						}
-					});
-				}
-			}
-		};
-
-		/**
-		 * mall saver
-		 */
-		Handler<Message> mallSaver = new Handler<Message>() {
-			public void handle(Message message) {
-				// insert product
-				if ("insert".equals(message.body())) {
-					System.out.println("saved mall");
-
-					//EventBus eb = vertx.eventBus();
-					//eb.publish("shop.saver.complete.product", "");
-				}
-			}
-		};
-
-		vertx.eventBus().registerHandler("shop.saver.query", new Handler<Message<String>>() {
-			@Override
-			public void handle(final Message<String> msg) {
-				System.out.println("Received message:" + msg.body());
-
-				// query object
-				JsonObject json = new JsonObject();
-				json.putString("action","raw");
-				json.putString("command", msg.body());
-
-				vertx.eventBus().send("shop.saver.db", json, new Handler<Message<JsonObject>>() {
-					@Override
-					public void handle(Message<JsonObject> dbMsg) {
-						System.out.println("asdg");
-						JsonObject result = dbMsg.body();
-						//System.out.println(result.toString());
-						msg.reply(result.getArray("results").<JsonArray>get(0).get(0).toString());
-					}
-				});
-			}
-		});
+		eb.registerHandler(baseAddress, this);
 	}
 
 	@Override
-	public void handle(Message<JsonObject> event) {
-		// TODO Auto-generated method stub
+	public void handle(final Message<JsonObject> message) {
+		String command = message.body().getString("command");
+
+		if (command == null) {
+			//sendError(message, "command must be specified");
+			return;
+		} else {
+			command = command.toLowerCase();
+		}
+
+		InfoLoader loader = new InfoLoader(conn);
+		InfoSaver saver = new InfoSaver(conn);
+
+		switch (command) {
+		case "insert_product" :
+			break;
+		case "insert_mall" :
+			break;
+		case "insert_malltype" :
+			MallType mallType = new MallType(message.body().getObject("data"));
+			saver.setMallType(mallType);
+			sendOK(message);
+			break;
+		case "select_product" :
+			if (message.body().getString("idx") == null) {
+				JsonArray reply = loader.getProduct();
+				message.reply(reply);
+			} else {
+				JsonObject reply = loader.getProduct(message.body().getNumber("idx"));
+				sendOK(message, reply);
+			}
+			break;
+		case "select_mall" :
+			break;
+		case "select_malltype" :
+			if (message.body().getString("mall_type") == null) {
+				JsonArray reply = loader.getMallType();
+				message.reply(reply);
+			} else {
+				JsonObject reply = loader.getMallType(message.body().getString("mall_type"));
+				sendOK(message, reply);
+			}
+			break;
+		default :
+			break;
+		}
 	}
 }

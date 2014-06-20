@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.vertx.shopcrawler.infomanager.testdbconnect">
+  <select id="checkExistSchema" resultType="String">
+    SELECT schema_name FROM information_schema.schemata WHERE schema_name = #{id}
+  </select>
+  <select id="checkExistTable" parameterType="String" resultType="String">
+    SELECT 'crawling_info.${value}'::regclass
+  </select>
+</mapper>
