@@ -24,12 +24,13 @@ public class downloader extends Verticle {
   {
 	private String url;
 
-	public HttpResponseHandler( String url ){
+	public HttpResponseHandler setUrl( String url ){
 		this.url = url;
+		return this;
 	}
 	  	
 	public void handle(HttpClientResponse resp) {
-		resp.bodyHandler( new HttpResponseBodyHandler( url ) );
+		resp.bodyHandler( new HttpResponseBodyHandler().setUrl(url) );
 	}
   };
 
@@ -37,8 +38,9 @@ public class downloader extends Verticle {
   {
 	private String url;
 
-	public HttpResponseBodyHandler( String url ){
+	public HttpResponseBodyHandler setUrl( String url ){
 		this.url = url;
+		return this;
 	}
 	  	
 	public void handle(Buffer data) {
@@ -88,7 +90,9 @@ public class downloader extends Verticle {
 		client.setPort(port)
 			  .setHost(host);
 
-		HttpClientRequest request = client.get( uri + "?" + query , new HttpResponseHandler( message.body().toString() ) );
+		HttpClientRequest request = client.get( uri + "?" + query , new HttpResponseHandler()
+																		.setUrl( message.body().toString() ) 
+												);
 		request.end();
 	}
   };
