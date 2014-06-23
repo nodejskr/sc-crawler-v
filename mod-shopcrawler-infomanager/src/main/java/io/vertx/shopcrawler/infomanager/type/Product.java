@@ -9,6 +9,20 @@ public class Product implements TypeImpl {
 	private String name;
 	private String img_uri;
 
+	public Product() {
+	}
+
+	public Product(int mall_idx, int price, String name, String img_uri) {
+		this.mall_idx = mall_idx;
+		this.price = price;
+		this.name = name;
+		this.img_uri = img_uri;
+	}
+
+	public Product(JsonObject source) {
+		this(source.getInteger("mall_idx"), source.getInteger("price"), source.getString("name"), source.getString("img_uri"));
+	}
+
 	public int getIdx() {
 		return idx;
 	}

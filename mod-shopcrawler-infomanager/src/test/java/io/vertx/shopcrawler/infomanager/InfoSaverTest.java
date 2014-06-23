@@ -1,5 +1,6 @@
 package io.vertx.shopcrawler.infomanager;
 
+import io.vertx.shopcrawler.infomanager.mapper.ProductMapper;
 import io.vertx.shopcrawler.infomanager.type.MallType;
 import io.vertx.shopcrawler.infomanager.type.Product;
 
@@ -42,6 +43,24 @@ public class InfoSaverTest extends TestVerticle {
 
 	@Test
 	public void testSaveMallType() {
+		testComplete();		// 테스트 할 때만 주석처리 할 것
+		MallType mallType = new MallType("godo", "test.com");
+		JsonObject json = new JsonObject();
+		json.putString("command", "insert_malltype");
+		json.putObject("data", mallType.toJson());
+
+		eb.send(address, json, new Handler<Message<JsonObject>>() {
+			@Override
+			public void handle(Message<JsonObject> reply) {
+				logger.debug(reply);
+				testComplete();
+			}
+		});
+	}
+
+	@Test
+	public void testSaveMall() {
+		testComplete();		// 테스트 할 때만 주석처리 할 것
 		MallType mallType = new MallType("godo", "test.com");
 		JsonObject json = new JsonObject();
 		json.putString("command", "insert_malltype");
@@ -58,6 +77,18 @@ public class InfoSaverTest extends TestVerticle {
 
 	@Test
 	public void testSaveProduct() {
-		testComplete();
+		testComplete();		// 테스트 할 때만 주석처리 할 것
+		Product product = new Product(1, 3000, "test", "testsetset");
+		JsonObject json = new JsonObject();
+		json.putString("command", "addProductInfo");
+		json.putObject("data", product.toJson());
+
+		eb.send(address, json, new Handler<Message<JsonObject>>() {
+			@Override
+			public void handle(Message<JsonObject> reply) {
+				logger.debug(reply.body());
+				testComplete();
+			}
+		});
 	}
 }

@@ -15,8 +15,7 @@ public class MallType implements TypeImpl {
 	}
 
 	public MallType(JsonObject source) {
-		this.mall_type = source.getString("mall_type");
-		this.post_fix = source.getString("post_fix");
+		this(source.getString("mall_type"),source.getString("post_fix"));
 	}
 
 	public String getMallType() {

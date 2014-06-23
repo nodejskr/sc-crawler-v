@@ -2,11 +2,11 @@ package io.vertx.shopcrawler.infomanager;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
+import io.vertx.shopcrawler.infomanager.mapper.MallMapper;
 import io.vertx.shopcrawler.infomanager.mapper.MallTypeMapper;
 import io.vertx.shopcrawler.infomanager.mapper.ProductMapper;
 import io.vertx.shopcrawler.infomanager.type.*;
@@ -17,6 +17,8 @@ public class InfoLoader {
 	private List<MallType> mallTypes;
 	private Product product;
 	private List<Product> products;
+	private Mall mall;
+	private List<Mall> malls;
 
 	public InfoLoader(DbConnect dbConn) {
 		this.dbConn = dbConn;
@@ -78,5 +80,22 @@ public class InfoLoader {
 		}
 
 		return json;
+	}
+
+	public JsonArray getMall(List<String> getters) {
+		dbConn.excuteQuery(new Handler<SqlSession>() {
+			@Override
+			public void handle(SqlSession session) {
+				MallMapper mallMapper = session.getMapper(MallMapper.class);
+				malls = mallMapper.selectMallList();
+			}
+		});
+
+		JsonArray jsonArray = new JsonArray();
+		for (Mall mall : malls) {
+			jsonArray.add(mall.toJson(getters));
+		}
+
+		return jsonArray;
 	}
 }

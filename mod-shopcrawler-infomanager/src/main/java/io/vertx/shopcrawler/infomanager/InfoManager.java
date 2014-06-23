@@ -1,8 +1,10 @@
 package io.vertx.shopcrawler.infomanager;
 
-import io.vertx.shopcrawler.infomanager.type.MallType;
+import io.vertx.shopcrawler.infomanager.type.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
@@ -37,14 +39,29 @@ public class InfoManager extends BusModBase implements Handler<Message<JsonObjec
 		if (command == null) {
 			//sendError(message, "command must be specified");
 			return;
-		} else {
-			command = command.toLowerCase();
 		}
 
 		InfoLoader loader = new InfoLoader(conn);
 		InfoSaver saver = new InfoSaver(conn);
 
 		switch (command) {
+		case "addProductInfo" :
+			if (message.body().isArray()) {
+				JsonArray products = message.body().getArray("data");
+				saver.setProduct(products);
+				sendOK(message);
+			} else if (message.body().isObject()) {
+				Product product = new Product(message.body().getObject("data"));
+				saver.setProduct(product);
+				sendOK(message);
+			}
+			break;
+		case "getMallList" :
+			List<String> getters = new ArrayList<String>();
+			getters.add("mall_type");
+			getters.add("mall_url");
+			message.reply(loader.getMall(getters));
+			break;
 		case "insert_product" :
 			break;
 		case "insert_mall" :
