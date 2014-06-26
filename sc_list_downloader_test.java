@@ -99,8 +99,8 @@ public class sc_list_downloader_test extends Verticle {
 
 	
 			// add ListManager event
-		Handler<Message> site_list = new Handler<Message>(){
-			public void handle( Message message ){
+		Handler<Message<JsonObject>> site_list = new Handler<Message<JsonObject>>(){
+			public void handle( Message<JsonObject> message ){
 
 				JsonArray reply_obj = new JsonArray();
 				JsonObject obj = new JsonObject();

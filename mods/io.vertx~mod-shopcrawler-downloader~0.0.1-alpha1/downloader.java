@@ -10,6 +10,8 @@ import org.vertx.java.core.http.HttpClientResponse;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 
+import org.vertx.java.core.json.JsonObject;
+
 import java.net.*;
 import java.io.*;
 
@@ -23,28 +25,40 @@ public class downloader extends Verticle {
    private class HttpResponseHandler implements Handler<HttpClientResponse>
   {
 	private String url;
+	private String type;
 
 	public HttpResponseHandler setUrl( String url ){
 		this.url = url;
 		return this;
 	}
+
+	public HttpResponseHandler setType( String type ){
+		this.type = type;
+		return this;
+	}
 	  	
 	public void handle(HttpClientResponse resp) {
-		resp.bodyHandler( new HttpResponseBodyHandler().setUrl(url) );
+		resp.bodyHandler( new HttpResponseBodyHandler().setUrl(url).setType(type) );
 	}
   };
 
   private class HttpResponseBodyHandler implements Handler<Buffer>
   {
 	private String url;
+	private String type;
 
 	public HttpResponseBodyHandler setUrl( String url ){
 		this.url = url;
 		return this;
 	}
+
+	public HttpResponseBodyHandler setType( String type ){
+		this.type = type;
+		return this;
+	}
 	  	
 	public void handle(Buffer data) {
-		downloader.eb.send("shop.parse.parse", url + "\n" + data.toString() );
+		downloader.eb.send("shop.parse.parse", url + "\n" + type + "\n" + data.toString() );
 	}
   };
 
@@ -52,21 +66,24 @@ public class downloader extends Verticle {
   /*******************************************
   * shop_download_parse
   ******************************************/
-  private class shop_download_parse implements Handler<Message>
+  private class shop_download_parse implements Handler<Message<JsonObject>>
   {
-	public void handle( Message message ){
+	public void handle( Message<JsonObject> message ){
 		System.out.println("req download parsemode " + message.body() );
 
 		HttpClient client = vertx.createHttpClient();
 
 		
-		String url = message.body().toString();
+		JsonObject obj = message.body();
+		String url = obj.getString("url");
+		String type = obj.getString("type");
 		int port = 80;
 		String host = "127.0.0.1";
 		String uri = "";
 		String query = "";
 		
 		try{
+			
 			URL aURL = new URL( url );
 			if( -1 != aURL.getPort() ){
 				port = aURL.getPort();
@@ -81,6 +98,7 @@ public class downloader extends Verticle {
 			}
 			host = aURL.getHost();
 			uri = aURL.getPath();
+
 		}catch(Exception ex ){
 			System.out.println( "" + ex );
 		};
@@ -91,7 +109,8 @@ public class downloader extends Verticle {
 			  .setHost(host);
 
 		HttpClientRequest request = client.get( uri + "?" + query , new HttpResponseHandler()
-																		.setUrl( message.body().toString() ) 
+																		.setUrl( url )
+																		.setType( type )
 												);
 		request.end();
 	}

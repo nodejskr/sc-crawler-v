@@ -32,12 +32,9 @@ public class listmanager extends Verticle {
 
 				System.out.println("recv site_list " + i + " " + e.getString("url") );
 
-				eb.send( "shop.download.parse", e.getString("url")  );
+				eb.send( "shop.download.parse", e );
 
 			}
-
-			
-
 		}
 	} );
 
