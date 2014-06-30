@@ -8,13 +8,13 @@ import org.vertx.java.core.http.HttpClientResponse;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
+import org.vertx.java.core.json.JsonArray;
 
 import java.util.*;
 
 public class sc_list_downloader_test extends Verticle {
 	static EventBus eb;
 
-	/** 로딩 대기 타주는 클래스 **/
 	public abstract class ShopLoadingWaiterHandler implements Handler<Message>
 	{
 		private Verticle vc;
@@ -30,7 +30,6 @@ public class sc_list_downloader_test extends Verticle {
 			
 		};
 
-		/** Event 가 발생 할때 마다 check 해서 로드가 완료 된 것인지 확인!! **/
 		public void check(){
 
 			Iterator<String> iterator = elist.keySet().iterator();
@@ -38,12 +37,10 @@ public class sc_list_downloader_test extends Verticle {
 			while( iterator.hasNext() ){
 				String key = iterator.next();
 				if( !elist.get( key ).booleanValue() ){
-					// 하나라도 완성 안되었다면 그냥 리턴
 					return;
 				}
 			};
 
-			// 여기 까지 왔다면 다 성공한거니까 onStart()!!
 			onStart();
 
 		}
@@ -59,7 +56,6 @@ public class sc_list_downloader_test extends Verticle {
 		};
 
 
-		/** 상속 받아 구현해야 하는 함수 **/
 		public abstract void onStart();
 	}
 
@@ -79,10 +75,8 @@ public class sc_list_downloader_test extends Verticle {
 		ShopLoadingWaiterHandler water = new ShopLoadingWaiterHandler( this, eb ){
 
 			public void onStart(){
-
 				System.out.println("On Start...");
-				// send Get Msg
-				eb.publish("shop.list.add", "http://famersbs.wordpress.com/feed/?test=1");
+				eb.publish( "shop.start", "" );
 			};
 
 		};
@@ -94,14 +88,35 @@ public class sc_list_downloader_test extends Verticle {
 		Handler<Message> parse_parser = new Handler<Message>() {
 
 			public void handle( Message message ){
-				System.out.println("result\n " + message.body() );
+				//System.out.println("result\n " + message.body() );
 
-				System.out.println("\n\n Shop Test finish");
+				String url = message.body().toString().split("\n")[0];
+
+				System.out.println("\n\n Shop Test " + url );
 			}
 		};
 		eb.registerHandler("shop.parse.parse", parse_parser );
-			
 
+	
+			// add ListManager event
+		Handler<Message<JsonObject>> site_list = new Handler<Message<JsonObject>>(){
+			public void handle( Message<JsonObject> message ){
 
+				JsonArray reply_obj = new JsonArray();
+				JsonObject obj = new JsonObject();
+				obj.putString("url", "http://famersbs.wordpress.com/feed/?test=1");
+				obj.putString("type", "my" );
+				reply_obj.add( obj );
+				JsonObject obj2 = new JsonObject();
+				obj2.putString("url", "http://famersbs.wordpress.com/feed/?test=2");
+				obj2.putString("type", "my" );
+				reply_obj.add( obj2 );
+
+				message.reply( reply_obj );
+
+			}
+		};
+
+		eb.registerHandler( "shop.site.list", site_list );
 	}
 }
