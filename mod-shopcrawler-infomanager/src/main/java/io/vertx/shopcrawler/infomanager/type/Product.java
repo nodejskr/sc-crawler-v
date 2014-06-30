@@ -1,5 +1,7 @@
 package io.vertx.shopcrawler.infomanager.type;
 
+import java.util.List;
+
 import org.vertx.java.core.json.JsonObject;
 
 public class Product implements TypeImpl {
@@ -13,10 +15,10 @@ public class Product implements TypeImpl {
 	}
 
 	public Product(int mall_idx, int price, String name, String img_uri) {
-		this.mall_idx = mall_idx;
-		this.price = price;
-		this.name = name;
-		this.img_uri = img_uri;
+		this.setMallIdx(mall_idx);
+		this.setPrice(price);;
+		this.setName(name);;
+		this.setImgUri(img_uri);;
 	}
 
 	public Product(JsonObject source) {
@@ -57,11 +59,34 @@ public class Product implements TypeImpl {
 	@Override
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
-		json.putNumber("idx", idx);
-		json.putNumber("mall_idx", mall_idx);
-		json.putNumber("price", price);
-		json.putString("name", name);
-		json.putString("img_uri", img_uri);
+		json.putNumber("idx", getIdx());
+		json.putNumber("mall_idx", getMallIdx());
+		json.putNumber("price", getPrice());
+		json.putString("name", getName());
+		json.putString("img_uri", getImgUri());
+
+		return json;
+	}
+
+	@Override
+	public JsonObject toJson(List<String> getters) {
+		JsonObject json = new JsonObject();
+
+		if (getters.contains("idx")) {
+			json.putNumber("idx", getIdx());
+		}
+		if (getters.contains("mall_idx")) {
+			json.putNumber("mall_idx", getMallIdx());
+		}
+		if (getters.contains("price")) {
+			json.putNumber("price", getPrice());
+		}
+		if (getters.contains("name")) {
+			json.putString("name", getName());
+		}
+		if (getters.contains("img_uri")) {
+			json.putString("img_uri", getImgUri());
+		}
 
 		return json;
 	}

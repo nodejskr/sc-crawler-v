@@ -1,6 +1,5 @@
 package io.vertx.shopcrawler.infomanager.type;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.vertx.java.core.json.JsonObject;
@@ -15,10 +14,10 @@ public class Mall implements TypeImpl {
 	}
 
 	public Mall(Number idx, String mall_type, String mall_id, String mall_url) {
-		this.idx = idx;
-		this.mall_type = mall_type;
-		this.mall_id = mall_id;
-		this.mall_url = mall_url;
+		this.setIdx(idx);
+		this.setMallType(mall_type);
+		this.setMallId(mall_id);
+		this.setMallUrl(mall_url);
 	}
 
 	public Mall(JsonObject source) {
@@ -42,8 +41,8 @@ public class Mall implements TypeImpl {
 	public String getMallId() {
 		return mall_id;
 	}
-	public void setMallId(String post_fix) {
-		this.mall_id = post_fix;
+	public void setMallId(String mall_id) {
+		this.mall_id = mall_id;
 	}
 
 	public String getMallUrl() {
@@ -57,10 +56,10 @@ public class Mall implements TypeImpl {
 	@Override
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
-		json.putNumber("idx", idx);
-		json.putString("mall_type", mall_type);
-		json.putString("mall_id", mall_id);
-		json.putString("mall_url", mall_url);
+		json.putNumber("idx", getIdx());
+		json.putString("mall_type", getMallType());
+		json.putString("mall_id", getMallId());
+		json.putString("mall_url", getMallUrl());
 
 		return json;
 	}
@@ -70,16 +69,16 @@ public class Mall implements TypeImpl {
 		JsonObject json = new JsonObject();
 
 		if (getters.contains("idx")) {
-			json.putNumber("idx", idx);
+			json.putNumber("idx", getIdx());
 		}
 		if (getters.contains("mall_type")) {
-			json.putString("mall_type", mall_type);
+			json.putString("mall_type", getMallType());
 		}
 		if (getters.contains("mall_id")) {
-			json.putString("mall_id", mall_id);
+			json.putString("mall_id", getMallId());
 		}
 		if (getters.contains("mall_url")) {
-			json.putString("mall_url", mall_url);
+			json.putString("mall_url", getMallUrl());
 		}
 
 		return json;
