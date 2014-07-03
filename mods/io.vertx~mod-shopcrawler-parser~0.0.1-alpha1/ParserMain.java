@@ -1,5 +1,3 @@
-package io.vertx.shopcrawler.parser;
-
 import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
