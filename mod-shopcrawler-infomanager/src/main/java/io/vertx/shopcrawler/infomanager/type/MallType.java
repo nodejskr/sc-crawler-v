@@ -1,5 +1,7 @@
 package io.vertx.shopcrawler.infomanager.type;
 
+import java.util.List;
+
 import org.vertx.java.core.json.JsonObject;
 
 public class MallType implements TypeImpl {
@@ -10,13 +12,12 @@ public class MallType implements TypeImpl {
 	}
 
 	public MallType(String mall_type, String post_fix) {
-		this.mall_type = mall_type;
-		this.post_fix = post_fix;
+		this.setMallType(mall_type);
+		this.setPostFix(post_fix);
 	}
 
 	public MallType(JsonObject source) {
-		this.mall_type = source.getString("mall_type");
-		this.post_fix = source.getString("post_fix");
+		this(source.getString("mall_type"),source.getString("post_fix"));
 	}
 
 	public String getMallType() {
@@ -35,8 +36,23 @@ public class MallType implements TypeImpl {
 	@Override
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
-		json.putString("mall_type", mall_type);
-		json.putString("post_fix", post_fix);
+		json.putString("mall_type", getMallType());
+		json.putString("post_fix", getPostFix());
+
+		return json;
+	}
+
+	@Override
+	public JsonObject toJson(List<String> getters) {
+		JsonObject json = new JsonObject();
+
+		if (getters.contains("mall_type")) {
+			json.putString("mall_type", getMallType());
+		}
+
+		if (getters.contains("post_fix")) {
+			json.putString("post_fix", getPostFix());
+		}
 
 		return json;
 	}

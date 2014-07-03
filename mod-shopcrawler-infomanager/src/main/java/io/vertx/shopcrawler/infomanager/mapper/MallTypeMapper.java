@@ -7,5 +7,5 @@ import io.vertx.shopcrawler.infomanager.type.MallType;
 public interface MallTypeMapper {
 	MallType selectMallType(String name);
 	List<MallType> selectMallTypeList();
-	int insertMallType(MallType mallType);
+	void insertMallType(MallType mallType);
 }

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.vertx.shopcrawler.infomanager.mapper.ProductMapper">
-  <select id="selectProduct" parameterType="Number" resultType="io.vertx.shopcrawler.infomanager.type.Product">
+  <select id="selectProduct" parameterType="java.lang.Number" resultType="io.vertx.shopcrawler.infomanager.type.Product">
     SELECT * FROM crawling_info.product WHERE idx='${value}'
   </select>
   <select id="selectProductList" resultType="io.vertx.shopcrawler.infomanager.type.Product">
     SELECT * FROM crawling_info.product
+  </select>
+  <select id="insertProduct" parameterType="io.vertx.shopcrawler.infomanager.type.Product">
+    INSERT INTO crawling_info.product (mall_idx, price, name, img_uri) VALUES ('${mall_idx}', '${price}', '${name}', '${img_uri}')
   </select>
 </mapper>

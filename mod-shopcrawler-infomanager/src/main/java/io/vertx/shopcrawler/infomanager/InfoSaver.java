@@ -5,17 +5,9 @@ import io.vertx.shopcrawler.infomanager.mapper.ProductMapper;
 import io.vertx.shopcrawler.infomanager.type.MallType;
 import io.vertx.shopcrawler.infomanager.type.Product;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
-import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
-import org.vertx.java.platform.Verticle;
-import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
-import org.vertx.java.core.json.JsonObject;
 
 public class InfoSaver {
 	private DbConnect dbConn;
@@ -41,12 +33,15 @@ public class InfoSaver {
 		});
 	}
 
-	public void setProduct(final Number number) {
+	public void setProduct(final JsonArray products) {
+	}
+
+	public void setProduct(final Product product) {
 		dbConn.excuteQuery(new Handler<SqlSession>() {
 			@Override
 			public void handle(SqlSession session) {
 				ProductMapper productMapper = session.getMapper(ProductMapper.class);
-				Product product = productMapper.selectProduct(number);
+				productMapper.insertProduct(product);
 			}
 		});
 	}

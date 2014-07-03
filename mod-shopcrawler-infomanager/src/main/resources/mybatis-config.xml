@@ -17,5 +17,7 @@
   <mappers>
     <mapper resource="testMapper.xml"/>
     <mapper resource="mall_type_mapper.xml"/>
+    <mapper resource="product_mapper.xml"/>
+    <mapper resource="mall_mapper.xml"/>
   </mappers>
 </configuration>
