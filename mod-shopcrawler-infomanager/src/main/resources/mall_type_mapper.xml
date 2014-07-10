@@ -8,6 +8,6 @@
     SELECT * FROM crawling_info.mall_type
   </select>
   <select id="insertMallType" parameterType="io.vertx.shopcrawler.infomanager.type.MallType">
-    INSERT INTO crawling_info.mall_type (mall_type, post_fix) VALUES ('${mall_type}', '${post_fix}')
+    INSERT INTO crawling_info.mall_type (mall_type, sur_fix) VALUES ('${mall_type}', '${sur_fix}')
   </select>
 </mapper>
