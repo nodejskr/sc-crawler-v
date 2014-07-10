@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -13,9 +14,22 @@ public class ParserCafe24DBurl extends ParserCore {
 	private String dburl = "/web/ghost_mall/new_naver_shop.com.txt";
 	private int connectionTimeout = 30;
 
+	public ParserCafe24DBurl() {
+
+	}
+
 	public ParserCafe24DBurl(String baseUrl, String encoding) {
 		this.url = baseUrl;
 		this.encoding = encoding;
+	}
+
+	public JsonArray parse(String data) {
+		BufferedReader reader = new BufferedReader(new StringReader(data));
+		try {
+			return this.getList(reader);
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	public JsonArray parse() {

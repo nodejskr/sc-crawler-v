@@ -10,6 +10,7 @@ public class ParserMain extends BusModBase implements
 	public void start() {
 		super.start();
 		JsonObject config = container.config();
+		
 		baseAddress = config.getString("address", "shop.parse.parse");
 		eb.registerHandler(baseAddress, this);
 	}
@@ -21,15 +22,18 @@ public class ParserMain extends BusModBase implements
 		ParserCore parser = null;
 		switch (type) {
 		case "cafe24":
-			parser = new ParserCafe24DBurl(url, "euc-kr");
+//			parser = new ParserCafe24DBurl(url, "euc-kr");
+			parser = new ParserCafe24DBurl();
 			break;
 		default:
 			break;
 		}
+		// info.call
 		JsonObject jsonData = new JsonObject();
 		jsonData.putString("command", "addProductInfo");
-		jsonData.putArray("data", parser.parse());
+		jsonData.putArray("data", parser.parse(body));
 		eb.publish("shop.saver.product.save", jsonData);
+		
 		sendOK(message);
 		message.reply();
 	}
