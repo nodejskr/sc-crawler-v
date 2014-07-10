@@ -59,7 +59,7 @@ public class InfoManager extends BusModBase implements Handler<Message<JsonObjec
 		case "getMallList" :
 			List<String> getters = new ArrayList<String>();
 			getters.add("mall_type");
-			getters.add("mall_url");
+			getters.add("db_url");
 			message.reply(loader.getMall(getters));
 			break;
 		case "insert_product" :

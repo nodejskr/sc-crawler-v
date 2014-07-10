@@ -9,6 +9,7 @@ public class Mall implements TypeImpl {
 	private String mall_type;
 	private String mall_id;
 	private String mall_url;
+	private String db_url;
 
 	public Mall() {
 	}
@@ -53,6 +54,14 @@ public class Mall implements TypeImpl {
 		this.mall_url = mall_url;
 	}
 
+	public String getDbUrl() {
+		return db_url;
+	}
+
+	public void setDbUrl(String db_url) {
+		this.db_url = db_url;
+	}
+
 	@Override
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
@@ -60,6 +69,7 @@ public class Mall implements TypeImpl {
 		json.putString("mall_type", getMallType());
 		json.putString("mall_id", getMallId());
 		json.putString("mall_url", getMallUrl());
+		json.putString("db_url", getDbUrl());
 
 		return json;
 	}
@@ -79,6 +89,9 @@ public class Mall implements TypeImpl {
 		}
 		if (getters.contains("mall_url")) {
 			json.putString("mall_url", getMallUrl());
+		}
+		if (getters.contains("db_url")) {
+			json.putString("db_url", getDbUrl());
 		}
 
 		return json;
