@@ -75,8 +75,8 @@ public class downloader extends Verticle {
 
 		
 		JsonObject obj = message.body();
-		String url = obj.getString("url");
-		String type = obj.getString("type");
+		String url = obj.getString("db_url");
+		String type = obj.getString("mall_type");
 		int port = 80;
 		String host = "127.0.0.1";
 		String uri = "";

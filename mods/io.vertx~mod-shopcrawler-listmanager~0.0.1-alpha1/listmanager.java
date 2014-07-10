@@ -13,14 +13,19 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.json.JsonArray;
 
+import java.util.*;
+
 public class listmanager extends Verticle {
 
   static EventBus eb;
 
-  private static void refreshSiteList(){
+  private final String DB_REQUEST_ID = "shop.site.list";
 
-  		// Request Data --> after write test code then move to timer
-	eb.send( "shop.site.list", "" , new Handler<Message<JsonArray>>(){
+  private void loadMallList(){
+	// Request Data --> after write test code then move to timer
+	JsonObject req_obj = new JsonObject();
+	req_obj.putString( "command", "getMallList" );
+	eb.send( DB_REQUEST_ID, req_obj , new Handler<Message<JsonArray>>(){
 		public void handle( Message<JsonArray> message ){
 
 			//JsonObject obj = message
@@ -30,14 +35,17 @@ public class listmanager extends Verticle {
 
 				JsonObject e = list.get( i );
 
-				System.out.println("recv site_list " + i + " " + e.getString("url") );
+				System.out.println("recv site_list " + i + " " + e.getString("db_url") );
 
 				eb.send( "shop.download.parse", e );
 
 			}
 		}
 	} );
+  }
 
+  private void refreshSiteList(){
+  	loadMallList();
   }
 
   public void start() {
