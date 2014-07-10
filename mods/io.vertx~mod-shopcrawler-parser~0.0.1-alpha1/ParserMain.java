@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
@@ -18,7 +21,7 @@ public class ParserMain extends BusModBase implements
 	@Override
 	public void handle(Message<JsonObject> message) {
 		String[] data = message.body().toString().split("\n");
-		String url = data[0], type = data[1], body = data[2];
+		String url = data[0], type = data[1], body = this.getBody(data);
 		ParserCore parser = null;
 		switch (type) {
 		case "cafe24":
@@ -36,6 +39,15 @@ public class ParserMain extends BusModBase implements
 		
 		sendOK(message);
 		message.reply();
+	}
+	
+	private String getBody(String[] message)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int i = 2; i < message.length; i++) {
+			builder.append(message[i]);
+		}
+		return builder.toString();
 	}
 
 }
