@@ -19,7 +19,7 @@ public class listmanager extends Verticle {
 
   static EventBus eb;
 
-  private final String DB_REQUEST_ID = "shop.site.list";
+  private String DB_REQUEST_ID = "info.call";
 
   private void loadMallList(){
 	// Request Data --> after write test code then move to timer
