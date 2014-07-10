@@ -7,7 +7,7 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
 public class ParserMain extends BusModBase implements
-		Handler<Message<JsonObject>> {
+		Handler<Message<String>> {
 	private String baseAddress = null;
 
 	public void start() {
@@ -19,7 +19,7 @@ public class ParserMain extends BusModBase implements
 	}
 
 	@Override
-	public void handle(Message<JsonObject> message) {
+	public void handle(Message<String> message) {
 		String[] data = message.body().toString().split("\n");
 		String url = data[0], type = data[1], body = this.getBody(data);
 		ParserCore parser = null;
@@ -35,10 +35,10 @@ public class ParserMain extends BusModBase implements
 		JsonObject jsonData = new JsonObject();
 		jsonData.putString("command", "addProductInfo");
 		jsonData.putArray("data", parser.parse(body));
-		eb.publish("shop.saver.product.save", jsonData);
+		eb.publish("info.call", jsonData);
 		
-		sendOK(message);
-		message.reply();
+		//sendOK(message);
+		//message.reply();
 	}
 	
 	private String getBody(String[] message)
