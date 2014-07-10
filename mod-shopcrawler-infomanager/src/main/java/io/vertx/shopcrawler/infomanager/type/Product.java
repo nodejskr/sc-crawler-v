@@ -10,19 +10,21 @@ public class Product implements TypeImpl {
 	private int price;
 	private String name;
 	private String img_uri;
+	private String prd_uri;
 
 	public Product() {
 	}
 
-	public Product(int mall_idx, int price, String name, String img_uri) {
+	public Product(int mall_idx, int price, String name, String img_uri, String prd_uri) {
 		this.setMallIdx(mall_idx);
 		this.setPrice(price);;
 		this.setName(name);;
 		this.setImgUri(img_uri);;
+		this.setPrdUri(prd_uri);
 	}
 
 	public Product(JsonObject source) {
-		this(source.getInteger("mall_idx"), source.getInteger("price"), source.getString("name"), source.getString("img_uri"));
+		this(source.getInteger("mall_idx"), source.getInteger("price"), source.getString("name"), source.getString("img_uri"), source.getString("prd_uri"));
 	}
 
 	public int getIdx() {
@@ -55,6 +57,12 @@ public class Product implements TypeImpl {
 	public void setImgUri(String img_uri) {
 		this.img_uri = img_uri;
 	}
+	public String getPrdUri() {
+		return prd_uri;
+	}
+	public void setPrdUri(String prd_uri) {
+		this.prd_uri = prd_uri;
+	}
 
 	@Override
 	public JsonObject toJson() {
@@ -64,6 +72,7 @@ public class Product implements TypeImpl {
 		json.putNumber("price", getPrice());
 		json.putString("name", getName());
 		json.putString("img_uri", getImgUri());
+		json.putString("prd_uri", getPrdUri());
 
 		return json;
 	}
@@ -86,6 +95,9 @@ public class Product implements TypeImpl {
 		}
 		if (getters.contains("img_uri")) {
 			json.putString("img_uri", getImgUri());
+		}
+		if (getters.contains("prd_uri")) {
+			json.putString("prd_uri", getPrdUri());
 		}
 
 		return json;

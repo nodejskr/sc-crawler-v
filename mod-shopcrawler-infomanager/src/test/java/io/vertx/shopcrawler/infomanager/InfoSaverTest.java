@@ -1,6 +1,5 @@
 package io.vertx.shopcrawler.infomanager;
 
-import io.vertx.shopcrawler.infomanager.mapper.ProductMapper;
 import io.vertx.shopcrawler.infomanager.type.MallType;
 import io.vertx.shopcrawler.infomanager.type.Product;
 
@@ -78,7 +77,7 @@ public class InfoSaverTest extends TestVerticle {
 	@Test
 	public void testSaveProduct() {
 		testComplete();		// 테스트 할 때만 주석처리 할 것
-		Product product = new Product(1, 3000, "test", "testsetset");
+		Product product = new Product(1, 3000, "test", "testsetset", "http://kkk.com");
 		JsonObject json = new JsonObject();
 		json.putString("command", "addProductInfo");
 		json.putObject("data", product.toJson());

@@ -8,6 +8,6 @@
     SELECT * FROM crawling_info.product
   </select>
   <select id="insertProduct" parameterType="io.vertx.shopcrawler.infomanager.type.Product">
-    INSERT INTO crawling_info.product (mall_idx, price, name, img_uri) VALUES ('${mall_idx}', '${price}', '${name}', '${img_uri}')
+    INSERT INTO crawling_info.product (mall_idx, price, name, img_uri, prd_uri) VALUES ('${mall_idx}', '${price}', '${name}', '${img_uri}', '${prd_uri}')
   </select>
 </mapper>

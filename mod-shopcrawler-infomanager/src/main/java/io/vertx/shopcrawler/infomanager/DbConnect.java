@@ -7,7 +7,6 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.log4j.Logger;
 import org.vertx.java.core.Handler;
 
 public class DbConnect {
@@ -17,7 +16,6 @@ public class DbConnect {
 	private DbConnect() throws IOException {
 		InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
 		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-		Logger.getLogger(getClass()).debug(sqlSessionFactory.getConfiguration().getDatabaseId());
 	}
 
 	public static DbConnect getInstance() throws IOException {

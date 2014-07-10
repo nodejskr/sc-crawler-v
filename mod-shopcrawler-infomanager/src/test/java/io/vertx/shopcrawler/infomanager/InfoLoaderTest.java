@@ -6,7 +6,6 @@ import io.vertx.shopcrawler.infomanager.type.MallType;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
@@ -22,7 +21,6 @@ import static org.vertx.testtools.VertxAssert.*;
 
 public class InfoLoaderTest extends TestVerticle {
 	private final String address = "test.infomanager.loader";
-	private final Logger logger = Logger.getLogger(this.getClass());
 	private List<MallType> mallTypeList = new ArrayList<MallType>();
 	private EventBus eb;
 
