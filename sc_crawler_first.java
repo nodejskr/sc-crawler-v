@@ -91,8 +91,10 @@ public class sc_crawler_first extends Verticle {
 			};
 
 		};
-		water.addModule("listmanager");
-		water.addModule("downloader");
+		water.addModule("info.call.listmanager");
+		water.addModule("info.call.downloader");
+		water.addModule("info.call.parser");
+		water.addModule("info.call.infomanager");
 		water.check();
 
 	}

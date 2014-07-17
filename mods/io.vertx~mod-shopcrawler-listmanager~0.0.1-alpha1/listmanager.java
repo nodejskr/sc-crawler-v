@@ -17,52 +17,53 @@ import java.util.*;
 
 public class listmanager extends Verticle {
 
-  static EventBus eb;
+	static EventBus eb;
 
-  private String DB_REQUEST_ID = "info.call";
+	private String DB_REQUEST_ID = "info.call.infomanager";
 
-  private void loadMallList(){
-	// Request Data --> after write test code then move to timer
-	JsonObject req_obj = new JsonObject();
-	req_obj.putString( "command", "getMallList" );
-	eb.send( DB_REQUEST_ID, req_obj , new Handler<Message<JsonArray>>(){
-		public void handle( Message<JsonArray> message ){
+	private void loadMallList(){
+		// Request Data --> after write test code then move to timer
+		JsonObject req_obj = new JsonObject();
+		req_obj.putString( "command", "getMallList" );
+		eb.send( DB_REQUEST_ID, req_obj , new Handler<Message<JsonArray>>(){
+			public void handle( Message<JsonArray> message ){
 
-			//JsonObject obj = message
-			JsonArray list = message.body();
+				//JsonObject obj = message
+				JsonArray list = message.body();
+				System.out.print(list.size());
 
-			for( int i = 0 ; i < list.size() ; ++ i ){
+				for( int i = 0 ; i < list.size() ; ++ i ){
 
-				JsonObject e = list.get( i );
+					JsonObject e = list.get( i );
 
-				System.out.println("recv site_list " + i + " " + e.getString("db_url") );
+					System.out.println("recv site_list " + i + " " + e.getString("db_url") );
 
-				eb.send( "shop.download.parse", e );
+					eb.send( "shop.download.parse", e );
 
+				}
 			}
-		}
-	} );
-  }
+		} );
+	}
 
-  private void refreshSiteList(){
-  	loadMallList();
-  }
+	private void refreshSiteList(){
+		loadMallList();
+	}
 
-  public void start() {
-    
-	System.out.println("Start List Manager");
-	
-	eb = vertx.eventBus();
+	public void start() {
 
-	// wait start signal
-	eb.registerHandler("shop.start", new Handler<Message>(){
-		public void handle( Message message ){
-			refreshSiteList();
-		}
-	});
+		System.out.println("Start List Manager");
 
-	// publish cloadComplete msg 
-	eb.publish( "shop.module.load.complete", "listmanager");
+		eb = vertx.eventBus();
 
-  }
+		// wait start signal
+		eb.registerHandler("info.call.listmanager", new Handler<Message>(){
+			public void handle( Message message ){
+				refreshSiteList();
+			}
+		});
+
+		// publish cloadComplete msg
+		eb.publish( "shop.module.load.complete", "listmanager");
+
+	}
 }

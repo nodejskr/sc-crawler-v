@@ -7,13 +7,13 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
 public class ParserMain extends BusModBase implements
-		Handler<Message<String>> {
+Handler<Message<String>> {
 	private String baseAddress = null;
 
 	public void start() {
 		super.start();
 		JsonObject config = container.config();
-		
+
 		baseAddress = config.getString("address", "shop.parse.parse");
 		eb.registerHandler(baseAddress, this);
 	}
@@ -25,7 +25,7 @@ public class ParserMain extends BusModBase implements
 		ParserCore parser = null;
 		switch (type) {
 		case "cafe24":
-//			parser = new ParserCafe24DBurl(url, "euc-kr");
+			//			parser = new ParserCafe24DBurl(url, "euc-kr");
 			parser = new ParserCafe24DBurl();
 			break;
 		default:
@@ -35,12 +35,12 @@ public class ParserMain extends BusModBase implements
 		JsonObject jsonData = new JsonObject();
 		jsonData.putString("command", "addProductInfo");
 		jsonData.putArray("data", parser.parse(body));
-		eb.publish("info.call", jsonData);
-		
+		eb.publish("info.call.parser", jsonData);
+
 		//sendOK(message);
 		//message.reply();
 	}
-	
+
 	private String getBody(String[] message)
 	{
 		StringBuilder builder = new StringBuilder();
