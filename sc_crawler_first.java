@@ -27,7 +27,7 @@ public class sc_crawler_first extends Verticle {
 
 			// regist Start Event
 			eb.registerHandler("shop.module.load.complete", this );
-			
+
 		};
 
 		public void check(){
@@ -61,18 +61,25 @@ public class sc_crawler_first extends Verticle {
 
 	public void start() {
 		eb = vertx.eventBus();
-		JsonObject config = container.config();
 
-		config.putString("address", "info.call");
+		JsonObject configDownloader = new JsonObject();
+		JsonObject configListmanager = new JsonObject();
+		JsonObject configParser = new JsonObject();
+		JsonObject configInfomanager = new JsonObject();
+
+		configDownloader.putString("address", "info.call.downloader");
+		configListmanager.putString("address", "info.call.listmanager");
+		configParser.putString("address", "info.call.parser");
+		configInfomanager.putString("address", "info.call.infomanager");
 
 		/////////////////////////////////////////////////////////////////
 		// modules Run
 
 		// Run downloader
-		container.deployModule ("io.vertx~mod-shopcrawler-downloader~0.0.1-alpha1", config);
-		container.deployModule ("io.vertx~mod-shopcrawler-listmanager~0.0.1-alpha1", config);
-		container.deployModule ("io.vertx~mod-shopcrawler-parser~0.0.1-alpha1", config);
-		container.deployModule ("com.shopcrawler~mod-infomanager~0.1.0-dev", config);
+		container.deployModule ("io.vertx~mod-shopcrawler-downloader~0.0.1-alpha1", configDownloader);
+		container.deployModule ("io.vertx~mod-shopcrawler-listmanager~0.0.1-alpha1", configListmanager);
+		container.deployModule ("io.vertx~mod-shopcrawler-parser~0.0.1-alpha1", configParser);
+		container.deployModule ("com.shopcrawler~mod-infomanager~0.1.0-dev", configInfomanager);
 
 		// Test Run!!
 		System.out.println("Start Test!!!");

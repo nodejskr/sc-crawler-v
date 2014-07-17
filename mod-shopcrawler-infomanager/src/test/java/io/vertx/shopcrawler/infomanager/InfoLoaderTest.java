@@ -24,6 +24,8 @@ public class InfoLoaderTest extends TestVerticle {
 	private final String address = "test.infomanager.loader";
 	private List<MallType> mallTypeList = new ArrayList<MallType>();
 	private EventBus eb;
+	private static int index = 0;
+	private Logger logger = Logger.getLogger(getClass());
 
 	private void appReady() {
 		super.start();
@@ -49,10 +51,25 @@ public class InfoLoaderTest extends TestVerticle {
 	 * 초기화
 	 */
 	private void init() {
+		setMallType("cafe24", "/web/ghost_mall/naver_shop_summary.com.html");
+		setMallType("makeshop", "/list/navernewopen.html?type=summary");
+		setMallType("godo", "/shop/compare/compare_list.php?pKey=novelty&engine=naverep3");
+		setMallType("gabia", "/naver_shop_list_sum.html");
+		setMallType("mallforyou", "/mallsarang/acecart/bin/naver_list3.php?mode=abstract");
+		setMallType("blueweb", "/letsmall/cpprice/naver_brain.php?opt=2");
+		setMallType("intore", "/compare/naver_db_sum.html");
+		setMallType("whois", "/FrontStore/__ipcs__/IPrice/navershop_summary.phtml");
+		setMallType("ntsoft", "/talent/cpprice/naver_brain.php?opt=2");
+		setMallType("nicecart", "/Nicecart4_new/Naverengine/new_enginedb_2.php");
+		setMallType("dreamweb", "/price_link/naver_sprice_new.php");
+		setMallType("wisa", "/_data/compare/naver/summary_prd.txt");
+	}
+
+	private void setMallType(String type, String postFix) {
 		MallType mallType = new MallType();
 
-		mallType.setMallType("cafe24");
-		mallType.setSurFix("/web/ghost_mall/naver_shop_summary.com.html");
+		mallType.setMallType(type);
+		mallType.setPostFix(postFix);
 
 		mallTypeList.add(mallType);
 	}
@@ -107,7 +124,7 @@ public class InfoLoaderTest extends TestVerticle {
 			@Override
 			public void handle(Message<JsonArray> reply) {
 				JsonArray json = reply.body();
-				//assertEquals(json.size(), mallTypeList.size());
+				assertEquals(json.size(), mallTypeList.size());
 			}
 		});
 	}
@@ -123,25 +140,78 @@ public class InfoLoaderTest extends TestVerticle {
 		loadOne(json, false, new Handler<Message<JsonObject>>() {
 			@Override
 			public void handle(Message<JsonObject> reply) {
-				assertEquals(type.getMallType(), reply.body().getString("mall_type"));
-				assertEquals(type.getSurFix(), reply.body().getString("sur_fix"));
+				String mallType = reply.body().getString("mall_type");
+				String postFix = reply.body().getString("post_fix");
+				assertEquals("Error : " + mallType + " - " + postFix, type.getMallType(), reply.body().getString("mall_type"));
+				assertEquals("Error : " + mallType + " - " + postFix, type.getPostFix(), reply.body().getString("post_fix"));
 			}
 		});
 	}
 
 	@Test
-	public void testLoadMallType() {
-		for (MallType type : mallTypeList) {
-			this.loadMallType(type);
-		}
+	public void testLoadMallType1() {
+		this.loadMallType(mallTypeList.get(index++));
 	}
 
 	@Test
+	public void testLoadMallType2() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType3() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType4() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType5() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType6() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType7() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType8() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType9() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType10() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType11() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
+	@Test
+	public void testLoadMallType12() {
+		this.loadMallType(mallTypeList.get(index++));
+	}
+
 	public void testLoadMallTypes() {
 		this.loadMallType();
 	}
 
-	@Test
 	public void testLoadMallList() {
 		JsonObject json = new JsonObject();
 		json.putString("command", "getMallList");
@@ -150,12 +220,10 @@ public class InfoLoaderTest extends TestVerticle {
 			@Override
 			public void handle(Message<JsonArray> reply) {
 				JsonArray jsonArray = reply.body();
-				Logger logger = Logger.getLogger(getClass());
-				logger.debug(reply.body());
-				/*if (jsonArray.size() != 0) {
+				if (jsonArray.size() != 0) {
 					Mall mall = new Mall((JsonObject) jsonArray.get(0));
 					assertEquals("mall list", mall.getClass(), Mall.class);
-				}*/
+				}
 			}
 		});
 	}

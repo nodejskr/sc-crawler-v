@@ -6,18 +6,18 @@ import org.vertx.java.core.json.JsonObject;
 
 public class MallType implements TypeImpl {
 	private String mall_type;
-	private String sur_fix;
+	private String post_fix;
 
 	public MallType() {
 	}
 
-	public MallType(String mall_type, String sur_fix) {
+	public MallType(String mall_type, String post_fix) {
 		this.setMallType(mall_type);
-		this.setSurFix(sur_fix);
+		this.setPostFix(post_fix);
 	}
 
 	public MallType(JsonObject source) {
-		this(source.getString("mall_type"),source.getString("sur_fix"));
+		this(source.getString("mall_type"),source.getString("post_fix"));
 	}
 
 	public String getMallType() {
@@ -26,18 +26,18 @@ public class MallType implements TypeImpl {
 	public void setMallType(String mall_type) {
 		this.mall_type = mall_type;
 	}
-	public String getSurFix() {
-		return sur_fix;
+	public String getPostFix() {
+		return post_fix;
 	}
-	public void setSurFix(String sur_fix) {
-		this.sur_fix = sur_fix;
+	public void setPostFix(String post_fix) {
+		this.post_fix = post_fix;
 	}
 
 	@Override
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
 		json.putString("mall_type", getMallType());
-		json.putString("sur_fix", getSurFix());
+		json.putString("post_fix", getPostFix());
 
 		return json;
 	}
@@ -50,8 +50,8 @@ public class MallType implements TypeImpl {
 			json.putString("mall_type", getMallType());
 		}
 
-		if (getters.contains("sur_fix")) {
-			json.putString("sur_fix", getSurFix());
+		if (getters.contains("post_fix")) {
+			json.putString("post_fix", getPostFix());
 		}
 
 		return json;

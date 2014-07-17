@@ -16,10 +16,10 @@ public class InfoSaver {
 		this.dbConn = dbConn;
 	}
 
-	public void setMallType(final String type, final String surFix) {
+	public void setMallType(final String type, final String postFix) {
 		MallType mallType = new MallType();
 		mallType.setMallType(type);
-		mallType.setSurFix(surFix);
+		mallType.setPostFix(postFix);
 		this.setMallType(mallType);
 	}
 
