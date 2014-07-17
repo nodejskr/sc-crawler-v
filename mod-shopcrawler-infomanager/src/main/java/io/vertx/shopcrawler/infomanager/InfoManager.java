@@ -48,15 +48,17 @@ public class InfoManager extends BusModBase implements Handler<Message<JsonObjec
 
 		switch (command) {
 		case "addProductInfo" :
-			if (message.body().isArray()) {
+			System.out.println("chekc 1 : " + message.body().isArray());
+//			if (message.body().isArray()) {
+				
 				JsonArray products = message.body().getArray("data");
 				saver.setProduct(products);
 				sendOK(message);
-			} else if (message.body().isObject()) {
-				Product product = new Product(message.body().getObject("data"));
-				saver.setProduct(product);
-				sendOK(message);
-			}
+//			} else if (message.body().isObject()) {
+//				Product product = new Product(message.body().getObject("data"));
+//				saver.setProduct(product);
+//				sendOK(message);
+//			}
 			break;
 		case "getMallList" :
 			List<String> getters = new ArrayList<String>();

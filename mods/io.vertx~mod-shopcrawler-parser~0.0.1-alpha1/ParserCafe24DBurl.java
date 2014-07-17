@@ -74,6 +74,7 @@ public class ParserCafe24DBurl extends ParserCore {
 				break;
 			case "ftend":
 				arr.add(data);
+				data = data.copy();
 			default:
 				continue;
 			}
