@@ -58,7 +58,7 @@ public class downloader extends Verticle {
 	}
 	  	
 	public void handle(Buffer data) {
-		downloader.eb.send("shop.parse.parse", url + "\n" + type + "\n" + data.toString() );
+		downloader.eb.send("info.call.parser", url + "\n" + type + "\n" + data.toString() );
 	}
   };
 
