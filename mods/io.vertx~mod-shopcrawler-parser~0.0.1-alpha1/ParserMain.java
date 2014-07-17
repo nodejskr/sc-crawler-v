@@ -37,7 +37,7 @@ Handler<Message<String>> {
 		JsonObject jsonData = new JsonObject();
 		jsonData.putString("command", "addProductInfo");
 		jsonData.putArray("data", parser.parse(body));
-		eb.publish("info.call.parser", jsonData);
+		eb.publish("info.call.infomanager", jsonData);
 
 		//sendOK(message);
 		//message.reply();
