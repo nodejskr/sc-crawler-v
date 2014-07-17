@@ -10,6 +10,7 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.testtools.TestVerticle;
 import org.vertx.testtools.VertxAssert;
@@ -77,10 +78,35 @@ public class InfoSaverTest extends TestVerticle {
 	@Test
 	public void testSaveProduct() {
 		testComplete();		// 테스트 할 때만 주석처리 할 것
-		Product product = new Product(1, 3000, "test", "testsetset", "http://kkk.com");
+		Product product = new Product(3, 3000, "test", "testsetset", "http://kkk.com");
 		JsonObject json = new JsonObject();
 		json.putString("command", "addProductInfo");
 		json.putObject("data", product.toJson());
+
+		eb.send(address, json, new Handler<Message<JsonObject>>() {
+			@Override
+			public void handle(Message<JsonObject> reply) {
+				logger.debug(reply.body());
+				testComplete();
+			}
+		});
+	}
+
+	@Test
+	public void testSaveProducts() {
+		//testComplete();		// 테스트 할 때만 주석처리 할 것
+		Product product = new Product(3, 3000, "test", "testsetset", "http://kkk.com");
+		JsonObject json = new JsonObject();
+
+		JsonArray array = new JsonArray();
+		array.add(product.toJson());
+		product = new Product(3, 3100, "tesasdt", "testsetset", "http://kkk.com");
+		array.add(product.toJson());
+
+		json.putString("command", "addProductInfo");
+		json.putArray("data", array);
+
+		logger.debug(json);
 
 		eb.send(address, json, new Handler<Message<JsonObject>>() {
 			@Override

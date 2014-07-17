@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -28,6 +29,16 @@ public class DbConnect {
 
 	public void excuteQuery(Handler<SqlSession> handler) {
 		SqlSession session = sqlSessionFactory.openSession();
+
+		try {
+			handler.handle(session);
+		} finally {
+			session.close();
+		}
+	}
+
+	public void excuteQuery(Handler<SqlSession> handler, ExecutorType type) {
+		SqlSession session = sqlSessionFactory.openSession(type);
 
 		try {
 			handler.handle(session);

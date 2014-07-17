@@ -67,12 +67,18 @@ public class ParserCafe24DBurl extends ParserCore {
 			String key = getKey(content.substring(start, end));
 			switch (key) {
 			case "url":
+				key = "prd_uri";
 			case "img_url":
+				key = "img_uri";
 			case "name":
-			case "price":
 				data.putString(key, content.substring(end + 3));
 				break;
+			case "price":
+				data.putNumber(key, Integer.parseInt(content.substring(end + 3)));
+				break;
 			case "ftend":
+				data.putNumber("mall_idx", 3);
+				data.putString("prd_uri", "asdg");
 				arr.add(data);
 				data = data.copy();
 			default:
