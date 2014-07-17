@@ -58,6 +58,9 @@ public class downloader extends Verticle {
 	}
 	  	
 	public void handle(Buffer data) {
+
+		System.out.println( data.getString( 0, data.length(), "euc-kr" ) );
+
 		downloader.eb.send("info.call.parser", url + "\n" + type + "\n" + data.toString() );
 	}
   };
