@@ -47,7 +47,7 @@ Handler<Message<String>> {
 	{
 		StringBuilder builder = new StringBuilder();
 		for (int i = 2; i < message.length; i++) {
-			builder.append(message[i]);
+			builder.append(message[i]+"\n");
 		}
 		return builder.toString();
 	}
