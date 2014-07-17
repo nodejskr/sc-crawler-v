@@ -69,7 +69,6 @@ public class downloader extends Verticle {
   private class shop_download_parse implements Handler<Message<JsonObject>>
   {
 	public void handle( Message<JsonObject> message ){
-		System.out.println("req download parsemode " + message.body() );
 
 		HttpClient client = vertx.createHttpClient();
 
