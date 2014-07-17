@@ -56,14 +56,14 @@ public class listmanager extends Verticle {
 		eb = vertx.eventBus();
 
 		// wait start signal
-		eb.registerHandler("info.call.listmanager", new Handler<Message>(){
+		eb.registerHandler("shop.start", new Handler<Message>(){
 			public void handle( Message message ){
 				refreshSiteList();
 			}
 		});
 
 		// publish cloadComplete msg
-		eb.publish( "shop.module.load.complete", "listmanager");
+		eb.publish( "shop.module.load.complete", "info.call.listmanager");
 
 	}
 }

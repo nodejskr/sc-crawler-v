@@ -16,6 +16,8 @@ Handler<Message<String>> {
 
 		baseAddress = config.getString("address", "shop.parse.parse");
 		eb.registerHandler(baseAddress, this);
+
+		eb.publish( "shop.module.load.complete", "info.call.parser");
 	}
 
 	@Override

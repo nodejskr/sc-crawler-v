@@ -30,6 +30,8 @@ public class InfoManager extends BusModBase implements Handler<Message<JsonObjec
 		baseAddress = config.getString("address", "io.vertx.shopcrawler.infomanager");
 
 		eb.registerHandler(baseAddress, this);
+
+		eb.publish( "shop.module.load.complete", "info.call.infomanager");
 	}
 
 	@Override

@@ -7,7 +7,7 @@
   <select id="selectMallList" resultType="io.vertx.shopcrawler.infomanager.type.Mall">
     SELECT
 		m.mall_type,
-		('http://' || m.mall_url || sur_fix) AS db_url
+		('http://' || m.mall_url || post_fix) AS db_url
 	FROM
 		crawling_info.mall AS m
 		LEFT OUTER JOIN crawling_info.mall_type AS mt
