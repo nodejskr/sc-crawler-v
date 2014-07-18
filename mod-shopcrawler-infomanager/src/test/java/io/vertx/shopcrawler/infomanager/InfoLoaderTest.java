@@ -51,7 +51,7 @@ public class InfoLoaderTest extends TestVerticle {
 	 * 초기화
 	 */
 	private void init() {
-		setMallType("cafe24", "/web/ghost_mall/naver_shop_summary.com.html");
+		setMallType("cafe24", "/web/ghost_mall/naver_shop.com.txt");
 		setMallType("makeshop", "/list/navernewopen.html?type=summary");
 		setMallType("godo", "/shop/compare/compare_list.php?pKey=novelty&engine=naverep3");
 		setMallType("gabia", "/naver_shop_list_sum.html");
