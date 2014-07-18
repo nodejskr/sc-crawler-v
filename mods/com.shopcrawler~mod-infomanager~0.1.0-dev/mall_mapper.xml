@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.vertx.shopcrawler.infomanager.mapper.MallMapper">
+  <select id="selectMall" parameterType="java.lang.Number" resultType="io.vertx.shopcrawler.infomanager.type.Mall">
+    SELECT * FROM crawling_info.mall WHERE idx='${value}'
+  </select>
+  <select id="selectMallList" resultType="io.vertx.shopcrawler.infomanager.type.Mall">
+    SELECT
+		m.mall_type,
+		('http://' || m.mall_url || post_fix) AS db_url
+	FROM
+		crawling_info.mall AS m
+		LEFT OUTER JOIN crawling_info.mall_type AS mt
+		ON m.mall_type = mt.mall_type
+  </select>
+  <select id="insertMall" parameterType="io.vertx.shopcrawler.infomanager.type.Mall">
+    INSERT INTO crawling_info.mall (mall_type, mall_id) VALUES ('${mall_type}', '${mall_id}')
+  </select>
+</mapper>

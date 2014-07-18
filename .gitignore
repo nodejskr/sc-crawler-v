@@ -1,0 +1,8 @@
+*.class
+mods/com.shopcrawler~mod-infomanager~0.1.0-dev/
+.classpath
+.project
+mod-shopcrawler-infomanager/.settings
+log4j.properties
+vertx_classpath.txt
+mod-shopcrawler-infomanager/bin

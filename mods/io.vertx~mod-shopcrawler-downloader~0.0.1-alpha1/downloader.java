@@ -58,7 +58,7 @@ public class downloader extends Verticle {
 	}
 	  	
 	public void handle(Buffer data) {
-		downloader.eb.send("shop.parse.parse", url + "\n" + type + "\n" + data.toString() );
+		downloader.eb.send("info.call.parser", url + "\n" + type + "\n" + data.getString( 0, data.length(), "euc-kr" ) );
 	}
   };
 
@@ -69,7 +69,6 @@ public class downloader extends Verticle {
   private class shop_download_parse implements Handler<Message<JsonObject>>
   {
 	public void handle( Message<JsonObject> message ){
-		System.out.println("req download parsemode " + message.body() );
 
 		HttpClient client = vertx.createHttpClient();
 
@@ -120,6 +119,6 @@ public class downloader extends Verticle {
 	System.out.println("Start downloader");
 	eb = vertx.eventBus();
 	eb.registerHandler("shop.download.parse", new shop_download_parse() );
-	eb.publish( "shop.module.load.complete", "downloader");
+	eb.publish( "shop.module.load.complete", "info.call.downloader");
   }
 }

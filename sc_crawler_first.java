@@ -12,7 +12,7 @@ import org.vertx.java.core.json.JsonArray;
 
 import java.util.*;
 
-public class sc_list_downloader_test extends Verticle {
+public class sc_crawler_first extends Verticle {
 	static EventBus eb;
 
 	public abstract class ShopLoadingWaiterHandler implements Handler<Message>
@@ -27,7 +27,7 @@ public class sc_list_downloader_test extends Verticle {
 
 			// regist Start Event
 			eb.registerHandler("shop.module.load.complete", this );
-			
+
 		};
 
 		public void check(){
@@ -61,14 +61,25 @@ public class sc_list_downloader_test extends Verticle {
 
 	public void start() {
 		eb = vertx.eventBus();
-		JsonObject config = container.config();
+
+		JsonObject configDownloader = new JsonObject();
+		JsonObject configListmanager = new JsonObject();
+		JsonObject configParser = new JsonObject();
+		JsonObject configInfomanager = new JsonObject();
+
+		configDownloader.putString("address", "info.call.downloader");
+		configListmanager.putString("address", "info.call.listmanager");
+		configParser.putString("address", "info.call.parser");
+		configInfomanager.putString("address", "info.call.infomanager");
 
 		/////////////////////////////////////////////////////////////////
 		// modules Run
 
 		// Run downloader
-		container.deployModule ("io.vertx~mod-shopcrawler-downloader~0.0.1-alpha1", config);
-		container.deployModule ("io.vertx~mod-shopcrawler-listmanager~0.0.1-alpha1", config);
+		container.deployModule ("io.vertx~mod-shopcrawler-downloader~0.0.1-alpha1", configDownloader);
+		container.deployModule ("io.vertx~mod-shopcrawler-listmanager~0.0.1-alpha1", configListmanager);
+		container.deployModule ("io.vertx~mod-shopcrawler-parser~0.0.1-alpha1", configParser);
+		container.deployModule ("com.shopcrawler~mod-infomanager~0.1.0-dev", configInfomanager);
 
 		// Test Run!!
 		System.out.println("Start Test!!!");
@@ -80,43 +91,11 @@ public class sc_list_downloader_test extends Verticle {
 			};
 
 		};
-		water.addModule("listmanager");
-		water.addModule("downloader");
+		water.addModule("info.call.listmanager");
+		water.addModule("info.call.downloader");
+		water.addModule("info.call.parser");
+		water.addModule("info.call.infomanager");
 		water.check();
 
-			// add parser Listner
-		Handler<Message> parse_parser = new Handler<Message>() {
-
-			public void handle( Message message ){
-				//System.out.println("result\n " + message.body() );
-
-				String url = message.body().toString().split("\n")[0];
-
-				System.out.println("\n\n Shop Test " + url );
-			}
-		};
-		eb.registerHandler("shop.parse.parse", parse_parser );
-
-	
-			// add ListManager event
-		Handler<Message<JsonObject>> site_list = new Handler<Message<JsonObject>>(){
-			public void handle( Message<JsonObject> message ){
-
-				JsonArray reply_obj = new JsonArray();
-				JsonObject obj = new JsonObject();
-				obj.putString("db_url", "http://famersbs.wordpress.com/feed/?test=1");
-				obj.putString("mall_type", "my" );
-				reply_obj.add( obj );
-				JsonObject obj2 = new JsonObject();
-				obj2.putString("db_url", "http://famersbs.wordpress.com/feed/?test=2");
-				obj2.putString("mall_type", "my" );
-				reply_obj.add( obj2 );
-
-				message.reply( reply_obj );
-
-			}
-		};
-
-		eb.registerHandler( "info.call", site_list );
 	}
 }
